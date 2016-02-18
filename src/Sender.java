@@ -33,6 +33,14 @@ public class Sender {
 				}
 			}
 			packetReceiver += "F";
+		} else if (method.equalsIgnoreCase("bit stuffing")) {
+			
+			packetReceiver += "01111110";
+			for (String str : payload) {
+				switch(str) {
+				
+				}
+			}
 		}
 		System.out.println("The resulting packet is: " + packetReceiver);
 
