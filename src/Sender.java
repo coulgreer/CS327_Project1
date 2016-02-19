@@ -31,7 +31,6 @@ public class Sender {
 						packetSender = packetSender.replace(packetSender, "");
 					}
 				}
-				System.out.println(packetReceiver);
 			}
 		} else if (method.equalsIgnoreCase("byte stuffing")) {
 			packetReceiver += FLAG;
@@ -62,7 +61,7 @@ public class Sender {
 			packetReceiver += packetSender;
 			packetReceiver += "01111110";
 		}
-		System.out.println("The resulting packet is: " + packetReceiver);
+		System.out.println("The sent packet is: " + packetReceiver);
 
 	}
 
