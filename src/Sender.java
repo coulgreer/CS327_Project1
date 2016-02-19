@@ -19,7 +19,20 @@ public class Sender {
 		String packetSender = input.nextLine();
 		payload = packetSender.split("(?!^)");
 		if (method.equalsIgnoreCase("byte count")) {
-
+			if (packetSender.length() < 9) {
+				packetReceiver = (packetSender.length() + 1) + packetSender;
+			} else {
+				while (packetSender.length() > 0) {
+					if (packetSender.length() > 8) {
+						packetReceiver += 8 + packetSender.substring(0, 7);
+						packetSender = packetSender.replaceFirst(packetSender.substring(0, 7), "");
+					} else {
+						packetReceiver += (packetSender.length() + 1) + packetSender;
+						packetSender = packetSender.replace(packetSender, "");
+					}
+				}
+				System.out.println(packetReceiver);
+			}
 		} else if (method.equalsIgnoreCase("byte stuffing")) {
 			packetReceiver += FLAG;
 			for (String str : payload) {
@@ -35,11 +48,11 @@ public class Sender {
 					break;
 				}
 			}
-			packetReceiver += "F";
+			packetReceiver += FLAG;
 		} else if (method.equalsIgnoreCase("bit stuffing")) {
 			String regex = "[0-1]+";
 			while (!packetSender.matches(regex)) {
-				System.out.println("Enter a string with only 1s and 0s");
+				System.out.println("Enter a string with only 1s and 0s: ");
 				packetSender = input.nextLine();
 			}
 			packetReceiver += "01111110";
