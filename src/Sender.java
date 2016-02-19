@@ -4,8 +4,8 @@ public class Sender {
 
 	public static void main(String[] args) {
 		String[] payload;
-		final char FLAG = 'F';
-		final char ESC = 'E';
+		final String FLAG = "F";
+		final String ESC = "E";
 		Scanner input = new Scanner(System.in);
 		System.out.println("Choose either byte count, byte stuffing, or bit stuffing.");
 		String method = input.nextLine();
@@ -14,33 +14,40 @@ public class Sender {
 			System.out.println("Type one of the following to choose: \n'byte count'\n'byte stuffing'\n'bit stuffing'");
 			method = input.nextLine();
 		}
-		System.out.println("Enter a string to transmit");
+		System.out.println("Enter a string to transmit: ");
 		String packetReceiver = "";
 		String packetSender = input.nextLine();
 		payload = packetSender.split("(?!^)");
-		if (method.equalsIgnoreCase("byte stuffing")) {
-			packetReceiver += "F";
+		if (method.equalsIgnoreCase("byte count")) {
+
+		} else if (method.equalsIgnoreCase("byte stuffing")) {
+			packetReceiver += FLAG;
 			for (String str : payload) {
 				switch (str) {
-				case "F":
-					packetReceiver += "EF";
+				case FLAG:
+					packetReceiver += ESC + FLAG;
 					break;
-				case "E":
-					packetReceiver += "EE";
+				case ESC:
+					packetReceiver += ESC + ESC;
 					break;
 				default:
 					packetReceiver += str;
+					break;
 				}
 			}
 			packetReceiver += "F";
 		} else if (method.equalsIgnoreCase("bit stuffing")) {
-			
-			packetReceiver += "01111110";
-			for (String str : payload) {
-				switch(str) {
-				
-				}
+			String regex = "[0-1]+";
+			while (!packetSender.matches(regex)) {
+				System.out.println("Enter a string with only 1s and 0s");
+				packetSender = input.nextLine();
 			}
+			packetReceiver += "01111110";
+			while (packetSender.contains("111111")) {
+				packetSender = packetSender.replace("111111", "1111101");
+			}
+			packetReceiver += packetSender;
+			packetReceiver += "01111110";
 		}
 		System.out.println("The resulting packet is: " + packetReceiver);
 
