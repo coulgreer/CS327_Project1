@@ -49,7 +49,13 @@ public class Receiver {
 				System.exit(0);
 			}
 		} else if (method.equalsIgnoreCase("bit stuffing")) {
-
+			if (packetReceiver.startsWith("01111110") && packetReceiver.endsWith("01111110")) {
+				packetSender = packetReceiver.substring(8, packetReceiver.length() - 8);
+				packetSender = packetSender.replace("1111101", "111111");
+			} else {
+				System.err.println("There is an error");
+				System.exit(0);
+			}
 		}
 		System.out.println("The original packet is: " + packetSender);
 
